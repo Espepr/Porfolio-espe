@@ -1,0 +1,434 @@
+// ════════════════════════════════════════════════════════════
+//  layout/_layout.scss — Structural Chrome
+//  Covers: preloader, cursor, header, mobile menu,
+//          footer, noise overlay, section header component.
+// ════════════════════════════════════════════════════════════
+@use '../vars'   as *;
+@use '../mixins' as *;
+
+// ── Noise Overlay ────────────────────────────────────────────
+//   Grain texture over the entire page for depth.
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: $z-noise;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+}
+
+// ════════════════════════════════════════════════════════════
+//  PRELOADER
+// ════════════════════════════════════════════════════════════
+#preloader {
+  position: fixed;
+  inset: 0;
+  background: $black;
+  z-index: $z-preloader;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: $gutter;
+  overflow: hidden;
+
+  .preloader__progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: $white;
+    width: 0%;
+    transition: width 50ms linear;
+    will-change: width;
+  }
+
+  .preloader__inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: flex-end;
+    align-self: flex-end;
+    gap: 1rem;
+  }
+
+  .preloader__label {
+    font-size: fluid(0.6rem, 1vw, 0.7rem);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: $white-40;
+  }
+
+  .preloader__counter {
+    font-family: $font-display;
+    font-size: fluid(5rem, 18vw, 14rem);
+    line-height: 0.85;
+    letter-spacing: -0.03em;
+    color: $white;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .preloader__brand {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: $font-display;
+    font-size: fluid(2.5rem, 7vw, 6rem);
+    letter-spacing: 0.08em;
+    opacity: 0;
+    white-space: nowrap;
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  CUSTOM CURSOR  (desktop only, hidden on touch)
+// ════════════════════════════════════════════════════════════
+#cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: $z-cursor;
+  mix-blend-mode: difference;
+
+  @include below($bp-md) {
+    display: none;
+  }
+
+  .cursor__dot {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: $white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .cursor__ring {
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    border: 1px solid $white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    @include transition((width, height, opacity), 0.35s, $ease-smooth);
+  }
+
+  &.is-hovering .cursor__ring {
+    width: 72px;
+    height: 72px;
+    opacity: 0.55;
+  }
+
+  &.is-hidden {
+    opacity: 0;
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  HEADER
+// ════════════════════════════════════════════════════════════
+#header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: $z-header;
+  padding: $space-sm $gutter;
+  mix-blend-mode: difference;
+  transition: transform 0.45s $ease-smooth;
+
+  &.is-hidden {
+    transform: translateY(-100%);
+  }
+
+  // 3-column grid: logo | spacer | nav/burger
+  .header__grid {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: $space-md;
+  }
+
+  .header__logo {
+    font-family: $font-display;
+    font-size: fluid(1.2rem, 2vw, 1.8rem);
+    letter-spacing: 0.06em;
+    color: $white;
+    line-height: 1;
+  }
+
+  // Desktop nav: 4 equal auto columns
+  .header__nav {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: flex-end;
+    gap: fluid(1.5rem, 3.5vw, 3.5rem);
+
+    @include below($bp-md) {
+      display: none;
+    }
+  }
+
+  .nav__link {
+    font-size: fluid(0.6rem, 1vw, 0.72rem);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: $white;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset-block-end: -2px;
+      inset-inline-start: 0;
+      width: 0;
+      height: 1px;
+      background: $white;
+      transition: width 0.3s $ease-smooth;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
+
+  // Mobile burger button
+  .header__burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 7px;
+    padding: 4px;
+    cursor: none;
+
+    @include below($bp-md) {
+      display: flex;
+    }
+
+    .burger__line {
+      display: block;
+      width: 26px;
+      height: 1px;
+      background: $white;
+      transition: transform 0.4s $ease-expo, opacity 0.3s ease;
+      transform-origin: center;
+    }
+
+    &[aria-expanded='true'] {
+      .burger__line:first-child {
+        transform: translateY(4px) rotate(45deg);
+      }
+
+      .burger__line:last-child {
+        transform: translateY(-4px) rotate(-45deg);
+      }
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  MOBILE MENU
+// ════════════════════════════════════════════════════════════
+#mobileMenu {
+  position: fixed;
+  inset: 0;
+  background: $black;
+  z-index: $z-menu;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding-block-start: fluid(6rem, 12vw, 8rem);
+  padding-block-end: $space-md;
+  padding-inline: $gutter;
+  transform: translateY(-105%);
+  transition: transform 0.7s $ease-expo;
+
+  // hidden attribute: keep display:grid so CSS transition works
+  &[hidden] {
+    display: grid;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  &:not([hidden]) {
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .mobile-nav {
+    display: grid;
+    align-content: center;
+    gap: 0.5rem;
+  }
+
+  .mobile-nav__link {
+    font-family: $font-display;
+    font-size: fluid(3.5rem, 13vw, 6rem);
+    color: $white;
+    display: block;
+    padding-block: 0.4rem;
+    border-bottom: 1px solid $white-10;
+    transition: opacity 0.25s ease;
+
+    &:hover {
+      opacity: 0.45;
+    }
+  }
+
+  .mobile-menu__footer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: $white-40;
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  FOOTER  (#contact)
+// ════════════════════════════════════════════════════════════
+#contact {
+  border-top: 1px solid $white-15;
+  padding-inline: $gutter;
+  padding-block: $space-xl;
+
+  .footer__grid {
+    display: grid;
+    gap: $space-xl;
+  }
+
+  // Top row: email CTA + wordmark
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: flex-end;
+    gap: $space-md;
+
+    @include below($bp-sm) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .footer__contact {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .footer__contact-label {
+    font-size: fluid(0.58rem, 0.9vw, 0.68rem);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: $white-40;
+  }
+
+  .footer__email {
+    font-family: $font-serif;
+    font-size: fluid(1.4rem, 3.5vw, 3.2rem);
+    font-weight: 300;
+    font-style: italic;
+    border-bottom: 1px solid $white-40;
+    padding-block-end: 0.4rem;
+    display: inline-block;
+    transition: border-color 0.3s ease;
+
+    &:hover {
+      border-color: $white;
+    }
+  }
+
+  .footer__wordmark-wrap {
+    overflow: hidden;
+  }
+
+  .footer__wordmark {
+    display: block;
+    font-family: $font-display;
+    font-size: fluid(4rem, 10vw, 10rem);
+    line-height: 0.85;
+    letter-spacing: 0.03em;
+    text-align: right;
+
+    @include below($bp-sm) {
+      text-align: left;
+      font-size: fluid(3.5rem, 18vw, 6rem);
+    }
+  }
+
+  // Bottom row: copy | social | offices
+  .footer__bottom {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: $space-sm;
+    border-top: 1px solid $white-10;
+    padding-block-start: $space-sm;
+    font-size: fluid(0.55rem, 0.85vw, 0.65rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: $white-40;
+
+    @include below($bp-sm) {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  }
+
+  .footer__social {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: center;
+    gap: $space-md;
+
+    @include below($bp-sm) {
+      justify-content: flex-start;
+    }
+  }
+
+  .footer__social-link {
+    transition: color 0.25s ease;
+
+    &:hover {
+      color: $white;
+    }
+  }
+
+  .footer__offices {
+    text-align: right;
+
+    @include below($bp-sm) {
+      text-align: left;
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  SECTION HEADER  (shared component, used in Works & Directors)
+// ════════════════════════════════════════════════════════════
+.section__header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding-inline: $gutter;
+  padding-block: $space-sm;
+  border-bottom: 1px solid $white-10;
+}
+
+.section__label {
+  font-size: fluid(0.6rem, 1vw, 0.7rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: $white-40;
+}
+
+.section__cta {
+  font-size: fluid(0.6rem, 1vw, 0.7rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $white-40;
+  transition: color 0.25s ease;
+
+  &:hover {
+    color: $white;
+  }
+}
