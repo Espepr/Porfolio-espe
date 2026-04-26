@@ -1,0 +1,35 @@
+// ════════════════════════════════════════════════════════════
+//  assets/sass/main.scss — Entry Point
+//
+//  Import order matters for the cascade:
+//    1. Tokens & utilities (no CSS output)
+//    2. Base reset
+//    3. Layout chrome (header, footer, preloader…)
+//    4. Shared components (buttons, grid cards, marquee)
+//    5. Section-level partials (aside, mainFeed)
+//    6. Page-specific styles (profile = hero + manifesto + about)
+//
+//  Compiled to: assets/css/main.css
+// ════════════════════════════════════════════════════════════
+
+// ── 1. Tokens & Utilities (no CSS output) ───────────────────
+@use 'partials/vars'    as *;
+@use 'partials/mixins'  as *;
+
+// ── 2. Base Reset ────────────────────────────────────────────
+@use 'partials/base/reset';
+
+// ── 3. Layout Chrome ─────────────────────────────────────────
+@use 'partials/layout/layout';
+
+// ── 4. Components ────────────────────────────────────────────
+@use 'partials/components/buttons';
+@use 'partials/components/gridCards';
+@use 'partials/components/marquee';
+
+// ── 5. Section Partials ──────────────────────────────────────
+@use 'partials/aside';
+@use 'partials/mainFeed';
+
+// ── 6. Pages ─────────────────────────────────────────────────
+@use 'partials/pages/profile';

@@ -1,0 +1,55 @@
+// ════════════════════════════════════════════════════════════
+//  _vars.scss — Design Tokens
+//  Single source of truth for all design decisions.
+//  No dependencies — can be loaded first by any partial.
+// ════════════════════════════════════════════════════════════
+
+// ── Color Palette ────────────────────────────────────────────
+$black:     #000000;
+$white:     #ffffff;
+
+// White with opacity levels
+$white-05:  rgba(255, 255, 255, 0.05);
+$white-10:  rgba(255, 255, 255, 0.10);
+$white-15:  rgba(255, 255, 255, 0.15);
+$white-40:  rgba(255, 255, 255, 0.40);
+$white-60:  rgba(255, 255, 255, 0.60);
+
+// ── Typography ───────────────────────────────────────────────
+$font-display:  'Bebas Neue', sans-serif;
+$font-mono:     'DM Mono', monospace;
+$font-serif:    'Cormorant Garant', serif;
+
+// ── Easing ───────────────────────────────────────────────────
+$ease-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+$ease-smooth:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$ease-out:     cubic-bezier(0.33, 1, 0.68, 1);
+
+// ── Breakpoints ──────────────────────────────────────────────
+//   Mobile-first but used as max-width thresholds via @mixin below()
+$bp-2xl: 1920px;
+$bp-xl:  1440px;
+$bp-lg:  1280px;
+$bp-md:  1024px;
+$bp-sm:  768px;
+$bp-xs:  480px;
+
+// ── Spacing Scale ────────────────────────────────────────────
+//   Uses clamp() directly (no Sass function dependency)
+$space-xs:  clamp(0.5rem,  1vw,   0.75rem);
+$space-sm:  clamp(1rem,    2vw,   1.5rem);
+$space-md:  clamp(1.5rem,  3vw,   2.5rem);
+$space-lg:  clamp(2rem,    4vw,   4rem);
+$space-xl:  clamp(3rem,    6vw,   7rem);
+$space-2xl: clamp(4rem,    9vw,   10rem);
+
+// ── Site Gutter ──────────────────────────────────────────────
+$gutter: clamp(1.25rem, 4vw, 3.5rem);
+
+// ── Z-index Scale ────────────────────────────────────────────
+$z-cursor:    9998;
+$z-preloader: 9999;
+$z-noise:     9997;
+$z-menu:      99;
+$z-header:    100;
+$z-preview:   50;

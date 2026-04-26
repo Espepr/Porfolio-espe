@@ -1,0 +1,265 @@
+// ════════════════════════════════════════════════════════════
+//  pages/_profile.scss — Page-Level Sections
+//  Covers: #hero, #manifesto, #about.
+//  These are full-bleed content sections specific to this page.
+// ════════════════════════════════════════════════════════════
+@use '../vars'   as *;
+@use '../mixins' as *;
+
+// ════════════════════════════════════════════════════════════
+//  HERO
+// ════════════════════════════════════════════════════════════
+#hero {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto;   // content | ticker
+  overflow: hidden;
+
+  // ── Inner grid ─────────────────────────────────────────
+  //   4 rows: eyebrow | headline | meta | scroll indicator
+  .hero__grid {
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+    padding-inline: $gutter;
+    padding-block-start: fluid(6rem, 12vw, 9rem);
+    padding-block-end: $space-lg;
+    gap: $space-md;
+  }
+
+  // ── Eyebrow ────────────────────────────────────────────
+  .hero__eyebrow {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: $space-sm;
+    font-size: fluid(0.6rem, 1vw, 0.7rem);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: $white-40;
+    overflow: hidden;
+  }
+
+  // ── Headline ───────────────────────────────────────────
+  .hero__headline {
+    display: grid;
+    gap: 0;
+    line-height: 1;
+  }
+
+  // Each line clips its overflow so text can animate in from below
+  .headline__line {
+    display: block;
+    overflow: hidden;
+
+    .headline__inner {
+      display: block;
+      font-family: $font-display;
+      font-size: fluid(5rem, 17vw, 19rem);
+      line-height: 0.88;
+      letter-spacing: -0.02em;
+    }
+
+    // Serif italic variant for the middle "The"
+    &--serif .headline__inner {
+      font-family: $font-serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: fluid(4rem, 14vw, 15rem);
+      letter-spacing: 0;
+      line-height: 0.95;
+    }
+  }
+
+  // ── Meta row: tagline + CTA ────────────────────────────
+  .hero__meta {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: flex-end;
+    gap: $space-md;
+
+    @include below($bp-sm) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .hero__tagline {
+    font-size: fluid(0.8rem, 1.4vw, 1rem);
+    line-height: 1.85;
+    color: $white-60;
+    max-width: 380px;
+  }
+
+  // ── Scroll indicator ───────────────────────────────────
+  .hero__scroll {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    gap: 0.75rem;
+    width: fit-content;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: $white-40;
+
+    .scroll__line {
+      display: block;
+      width: 36px;
+      height: 1px;
+      background: currentColor;
+      animation: scroll-pulse 2.2s ease-in-out infinite;
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+    }
+  }
+}
+
+// Scroll indicator keyframe
+@keyframes scroll-pulse {
+  0%,
+  100% {
+    transform: scaleX(0.4);
+    transform-origin: left;
+    opacity: 0.25;
+  }
+
+  50% {
+    transform: scaleX(1);
+    opacity: 0.8;
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  MANIFESTO
+// ════════════════════════════════════════════════════════════
+#manifesto {
+  padding-inline: $gutter;
+  padding-block: $space-2xl;
+  border-top: 1px solid $white-10;
+
+  // ── 2-column grid: aside label | content ───────────────
+  .manifesto__grid {
+    display: grid;
+    grid-template-columns: fluid(8rem, 18vw, 16rem) 1fr;
+    grid-template-rows: auto auto;
+    column-gap: $space-xl;
+    row-gap: $space-lg;
+
+    @include below($bp-md) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // ── Quote ──────────────────────────────────────────────
+  .manifesto__quote {
+    font-family: $font-serif;
+    font-size: fluid(1.4rem, 3.2vw, 2.9rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.45;
+    color: $white;
+    quotes: none;
+  }
+
+  // ── Stats row ──────────────────────────────────────────
+  .manifesto__stats {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: flex-start;
+    gap: $space-xl;
+    border-top: 1px solid $white-15;
+    padding-block-start: $space-md;
+
+    @include below($bp-md) {
+      grid-column: 1;
+      gap: $space-lg;
+    }
+
+    @include below($bp-xs) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: $space-sm;
+    }
+  }
+
+  // ── Individual stat ────────────────────────────────────
+  .stat {
+    display: grid;
+    gap: 0.5rem;
+
+    &__number {
+      font-family: $font-display;
+      font-size: fluid(2.2rem, 4.5vw, 4rem);
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+
+    &__suffix {
+      font-family: $font-display;
+      font-size: fluid(1.4rem, 2.5vw, 2.2rem);
+      line-height: 1;
+      vertical-align: super;
+    }
+
+    &__label {
+      font-size: fluid(0.58rem, 0.9vw, 0.68rem);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: $white-40;
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  ABOUT
+// ════════════════════════════════════════════════════════════
+#about {
+  padding-inline: $gutter;
+  padding-block: $space-2xl;
+  border-top: 1px solid $white-10;
+
+  // ── 2-column grid: aside label | body ──────────────────
+  .about__grid {
+    display: grid;
+    grid-template-columns: fluid(8rem, 18vw, 16rem) 1fr;
+    gap: $space-xl;
+
+    @include below($bp-md) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .about__body {
+    display: grid;
+    gap: $space-lg;
+  }
+
+  // ── Headline ───────────────────────────────────────────
+  .about__headline {
+    font-family: $font-serif;
+    font-size: fluid(1.4rem, 3vw, 2.6rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.45;
+  }
+
+  // ── Text + CTA side by side ────────────────────────────
+  .about__text-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: flex-end;
+    gap: $space-lg;
+
+    @include below($bp-sm) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .about__text {
+    font-size: fluid(0.8rem, 1.3vw, 0.9rem);
+    line-height: 1.9;
+    color: $white-60;
+    max-width: 460px;
+  }
+}

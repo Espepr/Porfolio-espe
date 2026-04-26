@@ -1,0 +1,46 @@
+// ════════════════════════════════════════════════════════════
+//  components/_buttons.scss — Button Variants
+// ════════════════════════════════════════════════════════════
+@use '../vars'   as *;
+@use '../mixins' as *;
+
+// ── Outlined Button ──────────────────────────────────────────
+//   Used in: Hero CTA
+.btn-outline {
+  display: inline-grid;
+  place-items: center;
+  padding: 0.7rem 1.8rem;
+  border: 1px solid $white;
+  font-family: $font-mono;
+  font-size: fluid(0.6rem, 1vw, 0.7rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  @include transition((background, color));
+
+  &:hover {
+    background: $white;
+    color: $black;
+  }
+
+  &:focus-visible {
+    outline-offset: 4px;
+  }
+}
+
+// ── Text Button (underline style) ────────────────────────────
+//   Used in: About section CTA
+.btn-text {
+  display: inline-block;
+  font-size: fluid(0.6rem, 1vw, 0.7rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border-bottom: 1px solid $white-40;
+  padding-block-end: 0.2rem;
+  white-space: nowrap;
+  @include transition((border-color, color));
+
+  &:hover {
+    border-color: $white;
+  }
+}

@@ -1,0 +1,76 @@
+// ════════════════════════════════════════════════════════════
+//  _mixins.scss — Reusable Sass Utilities
+//  No dependencies — pure functions and mixins.
+// ════════════════════════════════════════════════════════════
+@use 'sass:list';
+
+// ── Fluid Clamp Helper ───────────────────────────────────────
+//   Returns a clamp() value for fluid sizing.
+//   @param $min  {Number} Minimum size (rem/px)
+//   @param $vw   {String} Preferred viewport-relative value
+//   @param $max  {Number} Maximum size (rem/px)
+//   Usage: font-size: fluid(1rem, 3vw, 2.5rem);
+@function fluid($min, $vw, $max) {
+  @return clamp(#{$min}, #{$vw}, #{$max});
+}
+
+// ── Breakpoint: max-width ─────────────────────────────────────
+//   @param $bp {Number} Breakpoint value from $bp-* vars
+//   Usage: @include below($bp-md) { ... }
+@mixin below($bp) {
+  @media (max-width: $bp) {
+    @content;
+  }
+}
+
+// ── Breakpoint: min-width ─────────────────────────────────────
+//   @param $bp {Number} Breakpoint value from $bp-* vars
+//   Usage: @include above($bp-lg) { ... }
+@mixin above($bp) {
+  @media (min-width: $bp) {
+    @content;
+  }
+}
+
+// ── Grid Container ────────────────────────────────────────────
+//   Full-width grid with site gutters as padding.
+//   Usage: @include grid-container;
+@mixin grid-container {
+  display: grid;
+  padding-inline: var(--gutter, clamp(1.25rem, 4vw, 3.5rem));
+}
+
+// ── Visually Hidden (accessible) ─────────────────────────────
+//   Hides element visually but keeps it for screen readers.
+//   Usage: @include visually-hidden;
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ── Truncate Text ─────────────────────────────────────────────
+//   Single-line ellipsis.
+@mixin truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// ── Transition Preset ─────────────────────────────────────────
+//   @param $props {List}  CSS properties to transition
+//   @param $dur   {Time}  Duration
+//   @param $ease  {String} Easing function string
+@mixin transition($props: all, $dur: 0.3s, $ease: ease) {
+  $result: ();
+  @each $prop in $props {
+    $result: list.append($result, $prop $dur $ease, comma);
+  }
+  transition: $result;
+}

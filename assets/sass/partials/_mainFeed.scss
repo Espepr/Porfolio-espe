@@ -1,0 +1,110 @@
+// ════════════════════════════════════════════════════════════
+//  _mainFeed.scss — Main Content Feed
+//  Covers: #works (section wrapper) and #directors (list).
+//  Grid card internals live in components/_gridCards.scss.
+// ════════════════════════════════════════════════════════════
+@use 'vars'   as *;
+@use 'mixins' as *;
+
+// ════════════════════════════════════════════════════════════
+//  WORKS SECTION
+// ════════════════════════════════════════════════════════════
+#works {
+  padding-block-end: $space-xl;
+
+  // Works grid is styled in components/_gridCards.scss.
+  // This block only manages section-level spacing.
+}
+
+// ════════════════════════════════════════════════════════════
+//  DIRECTORS SECTION
+// ════════════════════════════════════════════════════════════
+#directors {
+  position: relative;
+  border-top: 1px solid $white-10;
+
+  // ── List wrapper ───────────────────────────────────────
+  .directors__list {
+    display: grid;        // each <li> stacks as a row
+    border-bottom: 1px solid $white-10;
+  }
+
+  // ── List item border ───────────────────────────────────
+  .director {
+    border-top: 1px solid $white-10;
+  }
+
+  // ── Director row link ─────────────────────────────────
+  //   4-column grid: index | name | discipline | arrow
+  .director__link {
+    display: grid;
+    grid-template-columns: fluid(2rem, 4vw, 3.5rem) 1fr auto auto;
+    align-items: center;
+    gap: $space-sm;
+    padding-inline: $gutter;
+    padding-block: fluid(1.2rem, 2.5vw, 2rem);
+    @include transition(background);
+
+    @include below($bp-xs) {
+      // Collapse to: index | name | arrow
+      grid-template-columns: auto 1fr auto;
+
+      .director__discipline {
+        display: none;
+      }
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.025);
+
+      .director__name {
+        transform: translateX(10px);
+      }
+
+      .director__arrow {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid $white;
+      outline-offset: -2px;
+    }
+  }
+
+  // ── Index number ──────────────────────────────────────
+  .director__index {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: $white-40;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // ── Name ──────────────────────────────────────────────
+  .director__name {
+    font-family: $font-display;
+    font-size: fluid(2rem, 5.5vw, 5rem);
+    letter-spacing: -0.01em;
+    line-height: 1;
+    transition: transform 0.45s $ease-smooth;
+  }
+
+  // ── Discipline tags ───────────────────────────────────
+  .director__discipline {
+    font-size: fluid(0.6rem, 1vw, 0.7rem);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: $white-40;
+    text-align: right;
+  }
+
+  // ── Arrow indicator ───────────────────────────────────
+  .director__arrow {
+    font-size: 1.1rem;
+    opacity: 0;
+    transform: translateX(-8px);
+    @include transition((opacity, transform), 0.35s, $ease-smooth);
+    margin-inline-start: 0.5rem;
+  }
+}

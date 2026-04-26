@@ -1,0 +1,155 @@
+// ════════════════════════════════════════════════════════════
+//  components/_gridCards.scss — Works Grid & Card Component
+// ════════════════════════════════════════════════════════════
+@use '../vars'   as *;
+@use '../mixins' as *;
+
+// ── Works Grid ───────────────────────────────────────────────
+.works__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: $white-10;     // gap color trick: parent bg shows through gaps
+  margin-block-start: 1px;
+
+  @include below($bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include below($bp-xs) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Work Card ────────────────────────────────────────────────
+.work-card {
+  background: $black;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+  position: relative;
+  cursor: none;
+
+  // ── Featured variant: double height ──────────────────────
+  &--tall {
+    grid-row: span 2;
+
+    .work-card__media {
+      aspect-ratio: 3 / 4;
+    }
+
+    @include below($bp-xs) {
+      grid-row: span 1;
+
+      .work-card__media {
+        aspect-ratio: 16 / 9;
+      }
+    }
+  }
+
+  // ── Media container ──────────────────────────────────────
+  .work-card__media {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    position: relative;
+  }
+
+  // ── Visual placeholder (replaces real image/video) ───────
+  .work-card__visual {
+    width: 100%;
+    height: 100%;
+    background: var(--card-bg, #111);
+    display: grid;
+    place-items: center;
+    transition: transform 0.7s $ease-smooth;
+    position: relative;
+
+    // Ghost letter watermark
+    &::after {
+      content: attr(data-letter);
+      font-family: $font-display;
+      font-size: fluid(4rem, 12vw, 10rem);
+      color: rgba(255, 255, 255, 0.04);
+      line-height: 1;
+    }
+
+    // Hover highlight overlay
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: $white;
+      opacity: 0;
+      mix-blend-mode: overlay;
+      transition: opacity 0.4s ease;
+    }
+  }
+
+  // ── Card footer ──────────────────────────────────────────
+  .work-card__footer {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: $space-xs;
+    padding: $space-sm;
+    border-top: 1px solid $white-10;
+  }
+
+  .work-card__index {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: $white-40;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .work-card__copy {
+    display: grid;
+    gap: 0.3rem;
+    min-width: 0;          // allows truncation inside grid
+  }
+
+  .work-card__title {
+    font-family: $font-mono;
+    font-size: fluid(0.78rem, 1.3vw, 1rem);
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .work-card__tags {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: $white-40;
+  }
+
+  .work-card__arrow {
+    font-size: 1rem;
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition: opacity 0.3s ease, transform 0.3s $ease-smooth;
+  }
+
+  // ── Hover / Focus state ──────────────────────────────────
+  &:hover,
+  &:focus-visible {
+    .work-card__visual {
+      transform: scale(1.04);
+    }
+
+    .work-card__visual::before {
+      opacity: 0.06;
+    }
+
+    .work-card__arrow {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $white;
+    outline-offset: -2px;
+  }
+}

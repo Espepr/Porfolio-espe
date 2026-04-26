@@ -1,0 +1,46 @@
+// ════════════════════════════════════════════════════════════
+//  components/_marquee.scss — Infinite Scrolling Marquee
+//  Used as the category ticker at the bottom of the hero.
+// ════════════════════════════════════════════════════════════
+@use '../vars'   as *;
+@use '../mixins' as *;
+
+// ── Ticker Container ─────────────────────────────────────────
+.hero__ticker {
+  overflow: hidden;
+  border-top: 1px solid $white-10;
+  padding-block: 1.1rem;
+
+  // Pause animation on reduced-motion
+  @media (prefers-reduced-motion: reduce) {
+    .ticker__track {
+      animation-play-state: paused;
+    }
+  }
+}
+
+// ── Scrolling Track ──────────────────────────────────────────
+//   Duplicated items inside so the loop is seamless:
+//   The track is 4× the content width → translateX(-50%) loops cleanly.
+.ticker__track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee-scroll 26s linear infinite;
+  will-change: transform;
+}
+
+// ── Single Item ──────────────────────────────────────────────
+.ticker__item {
+  display: block;
+  flex-shrink: 0;
+  font-size: fluid(0.58rem, 0.9vw, 0.72rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: $white-40;
+}
+
+// ── Keyframe ─────────────────────────────────────────────────
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
