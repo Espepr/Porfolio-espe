@@ -144,7 +144,7 @@ body::before {
   // 3-column grid: logo | spacer | nav/burger
   .header__grid {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 1fr;
     align-items: center;
     gap: $space-md;
   }
@@ -160,9 +160,10 @@ body::before {
   // Desktop nav: 4 equal auto columns
   .header__nav {
     display: grid;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(3, auto);
+    justify-self: end;
     justify-content: flex-end;
-    gap: fluid(1.5rem, 3.5vw, 3.5rem);
+    gap: fluid(1.5rem, 2.5vw, 3.5rem);
 
     @include below($bp-md) {
       display: none;
@@ -195,6 +196,7 @@ body::before {
   // Mobile burger button
   .header__burger {
     display: none;
+    justify-self: end;
     flex-direction: column;
     justify-content: center;
     gap: 7px;

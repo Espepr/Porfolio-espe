@@ -85,6 +85,14 @@
     }
   }
 
+  .work-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s $ease-smooth;
+  }
+
   // ── Card footer ──────────────────────────────────────────
   .work-card__footer {
     display: grid;
@@ -134,7 +142,8 @@
   // ── Hover / Focus state ──────────────────────────────────
   &:hover,
   &:focus-visible {
-    .work-card__visual {
+    .work-card__visual,
+    .work-card__image {
       transform: scale(1.04);
     }
 

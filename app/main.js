@@ -26,9 +26,20 @@ function initApp() {
   initCursor();
   initHeader();
   initMobileMenu();
+  initHeroVideo();
   initScrollAnimations();
   initDirectorsHover();
   initStatCounters();
+}
+
+// ════════════════════════════════════════════════════════════
+//  HERO VIDEO
+// ════════════════════════════════════════════════════════════
+function initHeroVideo() {
+  const heroVideo = document.querySelector('.hero__video');
+  if (!heroVideo) return;
+
+  heroVideo.playbackRate = 0.5;
 }
 
 // ════════════════════════════════════════════════════════════
@@ -151,19 +162,32 @@ function initCursor() {
 }
 
 // ════════════════════════════════════════════════════════════
-//  HEADER — hide on scroll down, show on scroll up
+//  HEADER — hide while scrolling, show when scrolling stops
 // ════════════════════════════════════════════════════════════
 function initHeader() {
   const header = document.getElementById('header');
   if (!header) return;
 
-  let lastY = 0;
+  let lastY = window.scrollY;
+  let revealTimer = null;
 
   window.addEventListener(
     'scroll',
     () => {
       const y = window.scrollY;
-      header.classList.toggle('is-hidden', y > lastY && y > 80);
+      const isVerticalScroll = Math.abs(y - lastY) > 1;
+
+      if (isVerticalScroll && y > 8) {
+        header.classList.add('is-hidden');
+      } else if (y <= 8) {
+        header.classList.remove('is-hidden');
+      }
+
+      window.clearTimeout(revealTimer);
+      revealTimer = window.setTimeout(() => {
+        header.classList.remove('is-hidden');
+      }, 160);
+
       lastY = y;
     },
     { passive: true }
@@ -333,18 +357,35 @@ function initDirectorsHover() {
   const preview   = document.getElementById('directorPreview');
   const directors = document.querySelectorAll('.director__link');
 
-  if (!preview || window.innerWidth <= 1024) return;
+  if (!preview || !directors.length) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
   const colors = ['#1a1a1a', '#141414', '#0d0d0d', '#181818', '#111'];
   const inner  = preview.querySelector('.director-preview__inner');
+  const image  = preview.querySelector('.director-preview__image');
 
   directors.forEach((link, i) => {
-    link.addEventListener('mouseenter', () => {
+    link.addEventListener('pointerenter', () => {
+      const previewSrc = link.dataset.previewSrc;
       inner.style.background = `linear-gradient(145deg, ${colors[i % colors.length]} 0%, #222 100%)`;
+
+      if (image && previewSrc) {
+        image.src = previewSrc;
+        image.alt = link.textContent.trim();
+        preview.classList.add('has-image');
+      } else if (image) {
+        image.removeAttribute('src');
+        image.alt = '';
+        preview.classList.remove('has-image');
+      }
+
+      preview.setAttribute('aria-hidden', 'false');
       preview.classList.add('is-visible');
     });
-    link.addEventListener('mouseleave', () => {
+    link.addEventListener('pointerleave', () => {
       preview.classList.remove('is-visible');
+      preview.classList.remove('has-image');
+      preview.setAttribute('aria-hidden', 'true');
     });
   });
 
@@ -354,7 +395,7 @@ function initDirectorsHover() {
   let mouseX   = 0;
   let mouseY   = 0;
 
-  document.addEventListener('mousemove', (e) => {
+  document.addEventListener('pointermove', (e) => {
     mouseX = e.clientX + 28;
     mouseY = e.clientY - preview.offsetHeight / 2;
   });
